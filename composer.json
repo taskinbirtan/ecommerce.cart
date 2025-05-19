@@ -1,0 +1,25 @@
+{
+    "name": "taskinbirtan/ecommerce.cart",
+    "autoload": {
+        "psr-4": {
+            "Taskinbirtan\\EcommerceCart\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Birtan Taşkın",
+            "email": "taskinbirtan@gmail.com"
+        }
+    ],
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Taskinbirtan\\EcommerceCart\\Providers\\CartServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "Taskinbirtan\\EcommerceCart\\Facades\\Cart"
+            }
+        }
+    }
+}
