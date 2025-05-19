@@ -2,7 +2,8 @@
     "name": "taskinbirtan/ecommerce.cart",
     "autoload": {
         "psr-4": {
-            "Taskinbirtan\\EcommerceCart\\": "src/"
+            "Taskinbirtan\\EcommerceCart\\": "src/",
+            "Taskinbirtan\\EcommerceCart\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -11,7 +12,6 @@
             "email": "taskinbirtan@gmail.com"
         }
     ],
-    "require": {},
     "extra": {
         "laravel": {
             "providers": [
@@ -20,6 +20,17 @@
             "aliases": {
                 "Cart": "Taskinbirtan\\EcommerceCart\\Facades\\Cart"
             }
+        }
+    },
+    "require-dev": {
+        "laravel/framework": "^10.0",
+        "pestphp/pest": "^2.36",
+        "pestphp/pest-plugin-laravel": "^2.4",
+        "orchestra/testbench": "^8.36"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }

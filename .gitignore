@@ -1,3 +1,8 @@
 /vendor/
 laravel
 .idea
+.env
+.env.testing
+composer.lock
+generator.php
+phpunit.xml
