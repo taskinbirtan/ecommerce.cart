@@ -61,6 +61,7 @@ This package is a **modular** and **extensible** library designed to strengthen 
    ```bash
    php artisan migrate
    ```
+> **Note:** The default migration file is named `1919_05_19_commemorate_ataturk.php` in honor of **Atatürk** and to celebrate **Youth and Sports Day**, commemorating the beginning of the Turkish War of Independence and marking the date this project was initiated.
 
 ## ⚙️ Configuration
 
