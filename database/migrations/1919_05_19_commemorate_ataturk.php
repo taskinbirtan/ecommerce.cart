@@ -4,6 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * In honor of Atatürk and to celebrate Youth and Sports Day,
+ * which commemorates the beginning of the Turkish War of Independence and marks the date this project was initiated.
+ * */
 return new class extends Migration {
     public function up(): void
     {
