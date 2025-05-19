@@ -1,82 +1,81 @@
 # Laravel E-Commerce Cart Package
 
-Bu paket, Laravel ekosisteminde **sepet (cart)** yönetimini sağlamlaştırmak için tasarlanmış, modüler ve genişletilebilir bir kütüphanedir. Aşağıdaki başlıklar altında sınıflandırılmıştır:
+This package is a **modular** and **extensible** library designed to strengthen **cart** management within the Laravel ecosystem. It is classified under the following headings:
 
-* **Core Cart**: Sepete ekleme, silme, miktar güncelleme ve temizleme fonksiyonları.
-* **Persistence Layer**: JSON özellikli `cart_items` migrasyonu ve `CartItem` modeli ile kalıcı veri saklama.
-* **Interface & Contracts**: `CartInterface`, `ProductResolverInterface` ve `TaxCalculatorInterface` ile soyutlama.
-* **Events System**: `ItemAdded`, `ItemUpdated`, `ItemRemoved`, `CartCleared` eventleri.
-* **Calculators**: `DefaultCartCalculator` ve `DefaultTaxCalculator` ile subtotal, vergi ve toplam hesaplama.
-* **Configurable Resolver**: `config/cart.php` üzerinden ürün modeli ve vergi oranı belirleme.
-* **Actions Framework**: E-posta gönderimi gibi örnek `MailAction` ile genişletilebilir action yapısı.
-* **Facade & Helpers**: `Cart` facade ve yardımcı fonksiyonlar.
+* **Core Cart**: Functions to add, remove, update quantity, and clear cart items.
+* **Persistence Layer**: Durable storage via a migration for `cart_items` with a JSON-enabled `options` column and the `CartItem` model.
+* **Interface & Contracts**: Abstractions through `CartInterface`, `ProductResolverInterface`, and `TaxCalculatorInterface`.
+* **Events System**: `ItemAdded`, `ItemUpdated`, `ItemRemoved`, and `CartCleared` events.
+* **Calculators**: Subtotal, tax, and total calculation via `DefaultCartCalculator` and `DefaultTaxCalculator`.
+* **Configurable Resolver**: Configure the model and tax rate (`tax_rate`) in `config/cart.php`.
+* **Actions**: Extendable action framework with examples like `MailAction` for sending emails.
+* **Facade & Helpers**: Provides a `Cart` facade and helper functions.
 
-## 📦 Özellikler
+## 📦 Features
 
-* **Sepet Yönetimi**
+* **Cart Management**
 
-    * Öğren ekleme/çıkarma/güncelleme (`addItem`, `removeItem`, `updateQuantity`, `clear`)
-    * Sepet ögelerini listeleme (`items`) ve toplam hesaplama (`total`)
-* **Veritabanı Desteği**
+    * Add/remove/update/clear items (`addItem`, `removeItem`, `updateQuantity`, `clear`)
+    * List items (`items`) and calculate total (`total`)
+* **Database Support**
 
-    * `cart_items` tablosu: `cart_id` (UUID), `item_id`, `quantity`, `unit_price`, `options` (JSON), timestamps
+    * `cart_items` table: `cart_id` (UUID), `item_id`, `quantity`, `unit_price`, `options` (JSON), timestamps
 * **Event Dispatch**
 
     * `ItemAdded`, `ItemUpdated`, `ItemRemoved`, `CartCleared`
 * **Actions**
 
-    * `MailAction` (Örnek): Gönderici, alıcı, konu, içerik parametreleri ile e-posta gönderme
-* **Konfigürasyon**
+    * Example `MailAction`—send email with sender, recipient, subject, and content parameters
+* **Configuration**
 
-    * `config/cart.php` üzerinden model ve vergi oranı (`tax_rate`) belirleme
-* **Hesaplayıcılar**
+    * Configure model and `tax_rate` via `config/cart.php`
+* **Calculators**
 
-    * `DefaultCartCalculator`: Alt toplam, vergi, genel toplam
-    * `DefaultTaxCalculator`: Yüzde bazlı vergi hesaplama
-* **Facade**: `Cart` facade araç sağlar
+    * `DefaultCartCalculator`: subtotal, tax, and grand total
+    * `DefaultTaxCalculator`: percentage-based tax calculation
+* **Facade**
 
-## ⚙️ Kurulum
+    * Provides the `Cart` facade
 
-1. Composer ile paketi ekleyin:
+## ⚙️ Installation
+
+1. Require the package via Composer:
 
    ```bash
    composer require taskinbirtan/ecommerce.cart
    ```
-
-2. Service provider ve facade (otomatik keşif yoksa) `config/app.php` içinde kayıt edin:
+2. Register the service provider and facade (if auto-discovery is disabled) in `config/app.php`:
 
    ```php
    Taskinbirtan\EcommerceCart\CartServiceProvider::class,
 
    'Cart' => Taskinbirtan\EcommerceCart\Facades\Cart::class,
    ```
-
-3. Konfigürasyon dosyasını yayınlayın:
+3. Publish the configuration file:
 
    ```bash
    php artisan vendor:publish --provider="Taskinbirtan\EcommerceCart\CartServiceProvider" --tag=config
    ```
-
-4. Migration’ları çalıştırın:
+4. Run the migrations:
 
    ```bash
    php artisan migrate
    ```
 
-## ⚙️ Yapılandırma
+## ⚙️ Configuration
 
 `config/cart.php`:
 
 ```php
 return [
     'product_model' => App\\Models\\Product::class,
-    'tax_rate'      => 18, // yüzde
+    'tax_rate'      => 18, // percentage
 ];
 ```
 
-## 🛠️ Kullanım
+## 🛠️ Usage
 
-### Sepete Öğe Ekleme
+### Add an Item to the Cart
 
 ```php
 use Cart;
@@ -84,41 +83,41 @@ use Cart;
 Cart::addItem($productId, $quantity = 1, ['color' => 'red']);
 ```
 
-### Öğe Silme
+### Remove an Item
 
 ```php
 Cart::removeItem($productId);
 ```
 
-### Miktar Güncelleme
+### Update Quantity
 
 ```php
 Cart::updateQuantity($productId, $newQuantity);
 ```
 
-### Sepeti Temizleme
+### Clear the Cart
 
 ```php
 Cart::clear();
 ```
 
-### Ögeleri Listeleme ve Toplam Hesaplama
+### List Items and Calculate Total
 
 ```php
 $items = Cart::items();
 $total = Cart::total();
 ```
 
-## 🔔 Eventler
+## 🔔 Events
 
-Aşağıdaki eventleri dinleyerek sepetteki değişikliklere tepki verebilirsiniz:
+You can listen to the following events to react to cart changes:
 
 * `Taskinbirtan\EcommerceCart\Events\ItemAdded`
 * `Taskinbirtan\EcommerceCart\Events\ItemUpdated`
 * `Taskinbirtan\EcommerceCart\Events\ItemRemoved`
 * `Taskinbirtan\EcommerceCart\Events\CartCleared`
 
-Örnek listener:
+Example listener:
 
 ```php
 public function handle(ItemAdded $event)
@@ -129,47 +128,45 @@ public function handle(ItemAdded $event)
 
 ## 📋 Test
 
-Paket, Pest & PHPUnit ile test edilebilir:
+This package can be tested with Pest & PHPUnit:
 
 ```bash
 vendor/bin/pest
 ```
 
-## 📝 Yapılacaklar
+## 📝 Roadmap
 
-Bu paketin ileriki sürümlerinde **Cart** dışındaki e-ticaret bileşenlerini de kapsayacak şekilde aşağıdaki modüllerin eklenmesi hedeflenmektedir:
+In future versions, we aim to cover **e-commerce components beyond Cart** with the following modules:
 
-* **Ürün Kataloğu**: CRUD işlemleri, detay sayfası, varyasyon desteği (renk, beden vb.)
-* **Kategori Yönetimi**: Çok katmanlı kategori/alt kategori hiyerarşisi ve kategori bazlı filtreleme
-* **Envanter & Stok Takibi**: Depo bazlı stok yönetimi, kritik stok uyarıları
-* **Sipariş Yönetimi**: Sipariş oluşturma, durum güncellemeleri, müşteri bildirimleri
-* **Ödeme Entegrasyonları**: Stripe, PayPal, yerel bankalar ve taksit seçenekleri
-* **Kargo & Lojistik**: Kargo firmaları API entegrasyonu, gönderi takip
-* **Kupon & İndirim**: Yüzde ve tutar bazlı promosyon kodları, kullanım kuralları
-* **Müşteri Hesapları**: Kayıt/giriş, profil, adres defteri, sipariş geçmişi
-* **Faturalandırma & İade**: PDF fatura oluşturma, iade talepleri yönetimi
-* **Çoklu Dil & Para Birimi**: Yerelleştirme altyapısı, döviz kuru güncellemeleri
-* **Raporlama & Analitik**: Satış, müşteri ve stok raporları, grafiksel gösterimler
-* **Arama & Filtreleme Altyapısı**: ElasticSearch/Algolia entegrasyonu, gelişmiş filtreler
-* **UI/UX Bileşenleri**: Responsive tema ve demo bileşenler (Tailwind, jQuery)
-* **Güvenlik & Performans**: Rate limiting, cache (Redis), ölçeklenebilir mimari önerileri
+* **Product Catalog**: CRUD operations, detail pages, variation support (color, size, etc.)
+* **Category Management**: Multi-level category/ subcategory hierarchy and category-based filtering
+* **Inventory & Stock Tracking**: Warehouse-based stock management, critical stock alerts
+* **Order Management**: Creating orders, status updates, and customer notifications
+* **Payment Integrations**: Stripe, PayPal, local banks, and installment options
+* **Shipping & Logistics**: Carrier API integration, shipment tracking
+* **Coupons & Discounts**: Percentage- and amount-based promo codes, usage rules
+* **Customer Accounts**: Registration/login, profile, address book, order history
+* **Invoicing & Returns**: PDF invoice generation, return request management
+* **Multi-Language & Multi-Currency**: Localization infrastructure, currency rate updates
+* **Reporting & Analytics**: Sales, customer, and stock reports with graphical displays
+* **Search & Filtering Infrastructure**: Elasticsearch/Algolia integration, advanced filters
+* **UI/UX Components**: Responsive theme and demo components (Tailwind, jQuery)
+* **Security & Performance**: Rate limiting, cache (Redis), scalable architecture recommendations
 
-## 🤝 Katkı
+## 🤝 Contributing
 
-* Fork’layın
-* Yeni bir branch açın (`git checkout -b feature/fooBar`)
-* Değişikliklerinizi commit edin (`git commit -am 'Add some fooBar'`)
-* Push edin (`git push origin feature/fooBar`)
-* Pull request oluşturun
-
-## 📝 Lisans
-
-MIT © taskinbirtan
+* Fork the repository
+* Create a new branch (`git checkout -b feature/fooBar`)
+* Commit your changes (`git commit -am 'Add some fooBar'`)
+* Push to the branch (`git push origin feature/fooBar`)
+* Open a pull request
 
 ## ☕ Buy Me a Coffee
 
-Eğer bu paketi beğendiysen ve geliştirmemi desteklemek istersen, bana bir kahve ısmarlayabilirsin! ☕
+If you like this package and want to support its development, you can buy me a coffee! ☕
 
 [Buy Me a Coffee](https://www.buymeacoffee.com/taskinbirtan)
 
+## 📝 License
 
+MIT © taskinbirtan
