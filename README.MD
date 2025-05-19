@@ -40,7 +40,7 @@ Bu paket, Laravel ekosisteminde **sepet (cart)** yönetimini sağlamlaştırmak 
 1. Composer ile paketi ekleyin:
 
    ```bash
-   composer require taskinbirtan/laravel-cart
+   composer require taskinbirtan/ecommerce.cart
    ```
 
 2. Service provider ve facade (otomatik keşif yoksa) `config/app.php` içinde kayıt edin:
